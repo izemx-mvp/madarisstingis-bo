@@ -11,10 +11,14 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AgentIaRouteImport } from './routes/agent-ia'
+import { Route as AnalyticsRouteImport } from './routes/analytics'
 import { Route as ChauffeursRouteImport } from './routes/chauffeurs'
 import { Route as CircuitsRouteImport } from './routes/circuits'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ElevesRouteImport } from './routes/eleves'
+import { Route as IncidentsRouteImport } from './routes/incidents'
+import { Route as MaintenanceRouteImport } from './routes/maintenance'
+import { Route as ParametresRouteImport } from './routes/parametres'
 import { Route as PlanningRouteImport } from './routes/planning'
 import { Route as VehiculesRouteImport } from './routes/vehicules'
 
@@ -26,6 +30,11 @@ const IndexRoute = IndexRouteImport.update({
 const AgentIaRoute = AgentIaRouteImport.update({
   id: '/agent-ia',
   path: '/agent-ia',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AnalyticsRoute = AnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ChauffeursRoute = ChauffeursRouteImport.update({
@@ -48,6 +57,21 @@ const ElevesRoute = ElevesRouteImport.update({
   path: '/eleves',
   getParentRoute: () => rootRouteImport,
 } as any)
+const IncidentsRoute = IncidentsRouteImport.update({
+  id: '/incidents',
+  path: '/incidents',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MaintenanceRoute = MaintenanceRouteImport.update({
+  id: '/maintenance',
+  path: '/maintenance',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ParametresRoute = ParametresRouteImport.update({
+  id: '/parametres',
+  path: '/parametres',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PlanningRoute = PlanningRouteImport.update({
   id: '/planning',
   path: '/planning',
@@ -62,20 +86,28 @@ const VehiculesRoute = VehiculesRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/agent-ia': typeof AgentIaRoute
+  '/analytics': typeof AnalyticsRoute
   '/chauffeurs': typeof ChauffeursRoute
   '/circuits': typeof CircuitsRoute
   '/dashboard': typeof DashboardRoute
   '/eleves': typeof ElevesRoute
+  '/incidents': typeof IncidentsRoute
+  '/maintenance': typeof MaintenanceRoute
+  '/parametres': typeof ParametresRoute
   '/planning': typeof PlanningRoute
   '/vehicules': typeof VehiculesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/agent-ia': typeof AgentIaRoute
+  '/analytics': typeof AnalyticsRoute
   '/chauffeurs': typeof ChauffeursRoute
   '/circuits': typeof CircuitsRoute
   '/dashboard': typeof DashboardRoute
   '/eleves': typeof ElevesRoute
+  '/incidents': typeof IncidentsRoute
+  '/maintenance': typeof MaintenanceRoute
+  '/parametres': typeof ParametresRoute
   '/planning': typeof PlanningRoute
   '/vehicules': typeof VehiculesRoute
 }
@@ -83,10 +115,14 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/agent-ia': typeof AgentIaRoute
+  '/analytics': typeof AnalyticsRoute
   '/chauffeurs': typeof ChauffeursRoute
   '/circuits': typeof CircuitsRoute
   '/dashboard': typeof DashboardRoute
   '/eleves': typeof ElevesRoute
+  '/incidents': typeof IncidentsRoute
+  '/maintenance': typeof MaintenanceRoute
+  '/parametres': typeof ParametresRoute
   '/planning': typeof PlanningRoute
   '/vehicules': typeof VehiculesRoute
 }
@@ -95,30 +131,42 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/agent-ia'
+    | '/analytics'
     | '/chauffeurs'
     | '/circuits'
     | '/dashboard'
     | '/eleves'
+    | '/incidents'
+    | '/maintenance'
+    | '/parametres'
     | '/planning'
     | '/vehicules'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/agent-ia'
+    | '/analytics'
     | '/chauffeurs'
     | '/circuits'
     | '/dashboard'
     | '/eleves'
+    | '/incidents'
+    | '/maintenance'
+    | '/parametres'
     | '/planning'
     | '/vehicules'
   id:
     | '__root__'
     | '/'
     | '/agent-ia'
+    | '/analytics'
     | '/chauffeurs'
     | '/circuits'
     | '/dashboard'
     | '/eleves'
+    | '/incidents'
+    | '/maintenance'
+    | '/parametres'
     | '/planning'
     | '/vehicules'
   fileRoutesById: FileRoutesById
@@ -126,10 +174,14 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AgentIaRoute: typeof AgentIaRoute
+  AnalyticsRoute: typeof AnalyticsRoute
   ChauffeursRoute: typeof ChauffeursRoute
   CircuitsRoute: typeof CircuitsRoute
   DashboardRoute: typeof DashboardRoute
   ElevesRoute: typeof ElevesRoute
+  IncidentsRoute: typeof IncidentsRoute
+  MaintenanceRoute: typeof MaintenanceRoute
+  ParametresRoute: typeof ParametresRoute
   PlanningRoute: typeof PlanningRoute
   VehiculesRoute: typeof VehiculesRoute
 }
@@ -148,6 +200,13 @@ declare module '@tanstack/react-router' {
       path: '/agent-ia'
       fullPath: '/agent-ia'
       preLoaderRoute: typeof AgentIaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/analytics': {
+      id: '/analytics'
+      path: '/analytics'
+      fullPath: '/analytics'
+      preLoaderRoute: typeof AnalyticsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/chauffeurs': {
@@ -178,6 +237,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ElevesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/incidents': {
+      id: '/incidents'
+      path: '/incidents'
+      fullPath: '/incidents'
+      preLoaderRoute: typeof IncidentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/maintenance': {
+      id: '/maintenance'
+      path: '/maintenance'
+      fullPath: '/maintenance'
+      preLoaderRoute: typeof MaintenanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/parametres': {
+      id: '/parametres'
+      path: '/parametres'
+      fullPath: '/parametres'
+      preLoaderRoute: typeof ParametresRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/planning': {
       id: '/planning'
       path: '/planning'
@@ -198,10 +278,14 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AgentIaRoute: AgentIaRoute,
+  AnalyticsRoute: AnalyticsRoute,
   ChauffeursRoute: ChauffeursRoute,
   CircuitsRoute: CircuitsRoute,
   DashboardRoute: DashboardRoute,
   ElevesRoute: ElevesRoute,
+  IncidentsRoute: IncidentsRoute,
+  MaintenanceRoute: MaintenanceRoute,
+  ParametresRoute: ParametresRoute,
   PlanningRoute: PlanningRoute,
   VehiculesRoute: VehiculesRoute,
 }
