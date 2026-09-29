@@ -1,15 +1,19 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
   BarChart3, Bell, Bot, Bus, CalendarDays, ChevronLeft, ChevronRight,
-  CircleUserRound, Gauge, GraduationCap, Menu, Search, Settings, ShieldAlert,
+  CircleUserRound, Gauge, GraduationCap, Menu, Search, Settings, ShieldAlert, Trash2,
   Sparkles, UsersRound, Wrench, Route as RouteIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import logo from "@/assets/madariss-tingis-logo.png.asset.json";
 import { cn } from "@/lib/utils";
+import { circuits, drivers, students, vehicles } from "@/lib/mock-data";
+import { useDemo } from "@/lib/demo-state";
 
 const nav = [
   ["/dashboard", "Tableau de bord", Gauge], ["/agent-ia", "Agent IA – Optimisation", Bot],
@@ -22,7 +26,22 @@ const nav = [
 
 export function AppShell({ title, eyebrow, children }: { title: string; eyebrow?: string; children: React.ReactNode }) {
   const [collapsed, setCollapsed] = useState(false);
+  const [query, setQuery] = useState("");
+  const { incidents, maintenances, notifications, markNotification, markAllNotifications, deleteNotification } = useDemo();
   const path = useRouterState({ select: (state) => state.location.pathname });
+  const results = useMemo(() => {
+    if (query.trim().length < 2) return [];
+    const q = query.toLowerCase();
+    return [
+      ...students.map(x=>({title:x.name,detail:`Élève · ${x.matricule} · ${x.circuit}`,to:"/eleves" as const,search:JSON.stringify(x)})),
+      ...vehicles.map(x=>({title:`Véhicule ${x.id}`,detail:`${x.brand} ${x.model} · ${x.status}`,to:"/vehicules" as const,search:JSON.stringify(x)})),
+      ...drivers.map(x=>({title:x.name,detail:`Chauffeur · ${x.vehicle}`,to:"/chauffeurs" as const,search:JSON.stringify(x)})),
+      ...circuits.map(x=>({title:`Circuit ${x.id}`,detail:x.name,to:"/circuits" as const,search:JSON.stringify(x)})),
+      ...maintenances.map(x=>({title:`Maintenance ${x.id}`,detail:`${x.vehicle} · ${x.type}`,to:"/maintenance" as const,search:JSON.stringify(x)})),
+      ...incidents.map(x=>({title:`Incident ${x.id}`,detail:`${x.vehicle} · ${x.type}`,to:"/incidents" as const,search:JSON.stringify(x)})),
+    ].filter(x=>x.search.toLowerCase().includes(q)).slice(0,7);
+  },[query,incidents,maintenances]);
+  const unread=notifications.filter(x=>!x.read).length;
   return (
     <TooltipProvider delayDuration={100}>
       <div className="min-h-screen bg-background lg:flex">
@@ -45,10 +64,10 @@ export function AppShell({ title, eyebrow, children }: { title: string; eyebrow?
         </aside>
         <div className="min-w-0 flex-1">
           <header className="sticky top-0 z-20 flex h-20 items-center gap-4 border-b bg-background/95 px-5 backdrop-blur md:px-8">
-            <Button variant="ghost" size="icon" className="lg:hidden" aria-label="Ouvrir le menu"><Menu /></Button>
+            <Sheet><SheetTrigger asChild><Button variant="ghost" size="icon" className="lg:hidden" aria-label="Ouvrir le menu"><Menu /></Button></SheetTrigger><SheetContent side="left" className="w-[290px] bg-sidebar p-4 text-sidebar-foreground"><SheetHeader><SheetTitle className="text-sidebar-foreground">Navigation</SheetTitle></SheetHeader><nav className="mt-6 space-y-1">{nav.map(([to,label,Icon])=><Link key={to} to={to} className="flex h-11 items-center gap-3 rounded-md px-3 text-sm hover:bg-sidebar-accent"><Icon className="size-4"/>{label}</Link>)}</nav></SheetContent></Sheet>
             <div className="hidden min-w-48 sm:block"><p className="text-xs font-semibold uppercase text-primary">Madariss TINGIS</p><p className="text-xs text-muted-foreground">Année scolaire 2026/2027</p></div>
-            <div className="relative mx-auto hidden w-full max-w-md md:block"><Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" /><Input className="h-10 rounded-full bg-muted pl-10 shadow-none" placeholder="Rechercher un élève, un circuit, un bus…" /></div>
-            <Button variant="ghost" size="icon" className="relative rounded-full" aria-label="Notifications"><Bell /><span className="absolute right-1 top-1 size-2 rounded-full bg-primary" /></Button>
+            <div className="relative mx-auto hidden w-full max-w-md md:block"><Search className="absolute left-3 top-1/2 z-10 size-4 -translate-y-1/2 text-muted-foreground" /><Input value={query} onChange={e=>setQuery(e.target.value)} className="h-10 rounded-full bg-muted pl-10 shadow-none" placeholder="Rechercher un élève, un circuit, un bus…" />{query.length>=2&&<div className="absolute top-12 z-40 w-full overflow-hidden rounded-lg border bg-popover shadow-xl">{results.length?results.map((x,i)=><Link key={`${x.title}-${i}`} to={x.to} onClick={()=>setQuery("")} className="block border-b px-4 py-3 text-sm last:border-0 hover:bg-muted"><b>{x.title}</b><span className="mt-0.5 block text-xs text-muted-foreground">{x.detail}</span></Link>):<p className="p-5 text-center text-sm text-muted-foreground">Aucun résultat</p>}</div>}</div>
+            <Popover><PopoverTrigger asChild><Button variant="ghost" size="icon" className="relative rounded-full" aria-label="Notifications"><Bell />{unread>0&&<span className="absolute right-0 top-0 grid size-5 place-items-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">{unread}</span>}</Button></PopoverTrigger><PopoverContent align="end" className="w-[390px] p-0"><div className="flex items-center justify-between border-b p-4"><div><b>Notifications</b><p className="text-xs text-muted-foreground">{unread} non lue(s)</p></div><Button variant="ghost" size="sm" onClick={markAllNotifications}>Tout marquer comme lu</Button></div><div className="max-h-[430px] overflow-y-auto">{notifications.slice(0,12).map(n=><div key={n.id} className={cn("flex gap-3 border-b p-4",!n.read&&"bg-secondary/5")}><button aria-label="Marquer comme lu" onClick={()=>markNotification(n.id)} className={cn("mt-1 size-2.5 shrink-0 rounded-full",n.read?"bg-muted":"bg-primary")}/><div className="min-w-0 flex-1"><p className="text-sm font-semibold">{n.title}</p><p className="mt-1 text-xs text-muted-foreground">{n.detail} · {n.time}</p></div><Button variant="ghost" size="icon" onClick={()=>deleteNotification(n.id)} aria-label="Supprimer"><Trash2 className="size-4"/></Button></div>)}</div></PopoverContent></Popover>
             <div className="flex items-center gap-3 border-l pl-4"><div className="hidden text-right sm:block"><p className="text-sm font-semibold">Nadia El Amrani</p><p className="text-xs text-muted-foreground">Responsable transport</p></div><CircleUserRound className="size-9 text-secondary" /></div>
           </header>
           <main className="mx-auto max-w-[1600px] px-5 py-7 md:px-8">
