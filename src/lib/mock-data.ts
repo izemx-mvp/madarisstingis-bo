@@ -18,15 +18,15 @@ const levels = ["Maternelle", "Primaire", "Collège", "Lycée"];
 const streets = ["Rue Al Amal", "Avenue Moulay Rachid", "Rue Ibn Battouta", "Boulevard Pasteur", "Route de Tétouan", "Rue Al Andalous"];
 
 export const students: Student[] = Array.from({ length: 108 }, (_, i) => {
-  const district = districts[i % districts.length];
-  const level = levels[i % levels.length];
+  const district = districts[i % districts.length] ?? "Centre-ville";
+  const level = levels[i % levels.length] ?? "Primaire";
   return {
     id: i + 1,
     matricule: `MT-${String(2601 + i).padStart(4, "0")}`,
-    name: `${firstNames[i % firstNames.length]} ${lastNames[(i * 3) % lastNames.length]}`,
+    name: `${firstNames[i % firstNames.length] ?? "Aya"} ${lastNames[(i * 3) % lastNames.length] ?? "Bennani"}`,
     level,
     classroom: `${["A", "B", "C"][i % 3]}${(i % 6) + 1}`,
-    address: `${12 + ((i * 7) % 88)}, ${streets[i % streets.length]}`,
+    address: `${12 + ((i * 7) % 88)}, ${streets[i % streets.length] ?? "Rue Al Amal"}`,
     district,
     circuit: i % 22 === 0 ? "—" : `C-${String((i % 10) + 1).padStart(2, "0")}`,
     pickup: `Arrêt ${district} ${String.fromCharCode(65 + (i % 4))}`,
