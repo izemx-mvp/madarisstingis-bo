@@ -1,0 +1,3 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { PlanningPage } from "@/pages/planning-page";
+export const Route = createFileRoute("/planning")({ head:()=>({meta:[{title:"Planning — Madariss TINGIS"},{name:"description",content:"Planning du transport scolaire."},{property:"og:title",content:"Planning transport"},{property:"og:description",content:"Planning des véhicules, chauffeurs et circuits."},{property:"og:type",content:"website"},{name:"twitter:card",content:"summary_large_image"}]}), component: PlanningPage });

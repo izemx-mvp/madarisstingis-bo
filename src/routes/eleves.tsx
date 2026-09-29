@@ -1,0 +1,3 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { StudentsPage } from "@/pages/list-pages";
+export const Route = createFileRoute("/eleves")({ head:()=>({meta:[{title:"Élèves — Madariss TINGIS"},{name:"description",content:"Gestion des élèves transportés."},{property:"og:title",content:"Élèves transportés"},{property:"og:description",content:"Affectations et points de ramassage."},{property:"og:type",content:"website"},{name:"twitter:card",content:"summary_large_image"}]}), component: StudentsPage });

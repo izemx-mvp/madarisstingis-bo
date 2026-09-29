@@ -1,0 +1,3 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { DashboardPage } from "@/pages/dashboard-page";
+export const Route = createFileRoute("/dashboard")({ head:()=>({meta:[{title:"Tableau de bord — Madariss TINGIS"},{name:"description",content:"Vue d’ensemble du transport scolaire."},{property:"og:title",content:"Tableau de bord transport"},{property:"og:description",content:"Activité quotidienne du transport Madariss TINGIS."},{property:"og:type",content:"website"},{name:"twitter:card",content:"summary_large_image"}]}), component: DashboardPage });

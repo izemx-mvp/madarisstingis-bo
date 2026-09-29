@@ -1,0 +1,3 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { DriversPage } from "@/pages/list-pages";
+export const Route = createFileRoute("/chauffeurs")({ head:()=>({meta:[{title:"Chauffeurs — Madariss TINGIS"},{name:"description",content:"Disponibilités et affectations des chauffeurs."},{property:"og:title",content:"Équipe de transport"},{property:"og:description",content:"Planning et affectations des chauffeurs."},{property:"og:type",content:"website"},{name:"twitter:card",content:"summary_large_image"}]}), component: DriversPage });

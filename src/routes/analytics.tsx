@@ -1,0 +1,3 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { PlaceholderPage } from "@/pages/placeholder-page";
+export const Route = createFileRoute("/analytics")({ head:()=>({meta:[{title:"Analytics — Madariss TINGIS"},{name:"description",content:"Indicateurs du transport scolaire."},{property:"og:title",content:"Analytics transport"},{property:"og:description",content:"Indicateurs du transport Madariss TINGIS."},{property:"og:type",content:"website"},{name:"twitter:card",content:"summary_large_image"}]}), component:()=> <PlaceholderPage type="Analytics"/> });
