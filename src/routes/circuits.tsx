@@ -1,0 +1,3 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { CircuitsPage } from "@/pages/list-pages";
+export const Route = createFileRoute("/circuits")({ head:()=>({meta:[{title:"Circuits scolaires — Madariss TINGIS"},{name:"description",content:"Planification des circuits scolaires."},{property:"og:title",content:"Circuits scolaires"},{property:"og:description",content:"Zones, capacités et affectations."},{property:"og:type",content:"website"},{name:"twitter:card",content:"summary_large_image"}]}), component: CircuitsPage });

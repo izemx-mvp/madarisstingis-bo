@@ -1,0 +1,3 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { VehiclesPage } from "@/pages/list-pages";
+export const Route = createFileRoute("/vehicules")({ head:()=>({meta:[{title:"Véhicules — Madariss TINGIS"},{name:"description",content:"Gestion de la flotte scolaire."},{property:"og:title",content:"Flotte scolaire"},{property:"og:description",content:"Disponibilité et entretien des véhicules."},{property:"og:type",content:"website"},{name:"twitter:card",content:"summary_large_image"}]}), component: VehiclesPage });

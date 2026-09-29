@@ -1,0 +1,3 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { AiPage } from "@/pages/ai-page";
+export const Route = createFileRoute("/agent-ia")({ head:()=>({meta:[{title:"Agent IA Transport — Madariss TINGIS"},{name:"description",content:"Simulation d’optimisation intelligente des circuits scolaires."},{property:"og:title",content:"Agent IA Transport"},{property:"og:description",content:"Optimisez les circuits, véhicules et chauffeurs."},{property:"og:type",content:"website"},{name:"twitter:card",content:"summary_large_image"}]}), component: AiPage });
