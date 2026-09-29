@@ -6,4 +6,4 @@
 - [x] Construire Analytics et son assistant IA simulé
 - [x] Finaliser Paramètres et historique d’activité
 - [x] Enrichir tables, filtres, actions groupées et retours utilisateur
-- [ ] Harmoniser les pages existantes et valider le scénario de démonstration
+- [x] Harmoniser les pages existantes et valider le scénario de démonstration

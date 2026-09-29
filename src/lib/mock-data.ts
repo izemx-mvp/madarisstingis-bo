@@ -41,8 +41,8 @@ export const vehicles = Array.from({ length: 14 }, (_, i) => ({
   model: ["Coaster", "Sprinter", "Turquoise", "Transit"][i % 4],
   capacity: [30, 45, 35, 28][i % 4],
   year: 2019 + (i % 6),
-  status: i === 2 || i === 8 ? "Maintenance" : i === 6 ? "Indisponible" : i < 10 ? "Affecté" : "Disponible",
-  circuit: i < 10 ? `C-${String(i + 1).padStart(2, "0")}` : "Non affecté",
+  status: i === 2 || i === 8 ? "Maintenance" : i === 6 ? "Indisponible" : i < 12 ? "Affecté" : "Disponible",
+  circuit: i === 10 ? "C-03" : i === 11 ? "C-09" : i < 10 && i !== 2 && i !== 8 ? `C-${String(i + 1).padStart(2, "0")}` : "Non affecté",
   maintenance: `${4 + i} oct. 2026`,
 }));
 
@@ -63,7 +63,7 @@ export const circuits = districts.slice(0, 10).map((district, i) => ({
   zone: district,
   students: [42, 38, 29, 31, 44, 27, 36, 24, 40, 35][i],
   capacity: [45, 45, 35, 35, 45, 30, 45, 30, 45, 35][i],
-  vehicle: `B-${String(i + 1).padStart(2, "0")}`,
+  vehicle: i === 2 ? "B-11" : i === 8 ? "B-12" : `B-${String(i + 1).padStart(2, "0")}`,
   driver: driverNames[i] ?? "Ahmed Benali",
   time: `0${6 + (i % 2)}:${i % 2 ? "15" : "30"}`,
   status: i === 8 ? "Généré par IA" : "Planifié",
