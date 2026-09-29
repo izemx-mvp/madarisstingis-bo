@@ -10,33 +10,128 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AgentIaRouteImport } from './routes/agent-ia'
+import { Route as ChauffeursRouteImport } from './routes/chauffeurs'
+import { Route as CircuitsRouteImport } from './routes/circuits'
+import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as ElevesRouteImport } from './routes/eleves'
+import { Route as PlanningRouteImport } from './routes/planning'
+import { Route as VehiculesRouteImport } from './routes/vehicules'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AgentIaRoute = AgentIaRouteImport.update({
+  id: '/agent-ia',
+  path: '/agent-ia',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChauffeursRoute = ChauffeursRouteImport.update({
+  id: '/chauffeurs',
+  path: '/chauffeurs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CircuitsRoute = CircuitsRouteImport.update({
+  id: '/circuits',
+  path: '/circuits',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ElevesRoute = ElevesRouteImport.update({
+  id: '/eleves',
+  path: '/eleves',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlanningRoute = PlanningRouteImport.update({
+  id: '/planning',
+  path: '/planning',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VehiculesRoute = VehiculesRouteImport.update({
+  id: '/vehicules',
+  path: '/vehicules',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/agent-ia': typeof AgentIaRoute
+  '/chauffeurs': typeof ChauffeursRoute
+  '/circuits': typeof CircuitsRoute
+  '/dashboard': typeof DashboardRoute
+  '/eleves': typeof ElevesRoute
+  '/planning': typeof PlanningRoute
+  '/vehicules': typeof VehiculesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/agent-ia': typeof AgentIaRoute
+  '/chauffeurs': typeof ChauffeursRoute
+  '/circuits': typeof CircuitsRoute
+  '/dashboard': typeof DashboardRoute
+  '/eleves': typeof ElevesRoute
+  '/planning': typeof PlanningRoute
+  '/vehicules': typeof VehiculesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/agent-ia': typeof AgentIaRoute
+  '/chauffeurs': typeof ChauffeursRoute
+  '/circuits': typeof CircuitsRoute
+  '/dashboard': typeof DashboardRoute
+  '/eleves': typeof ElevesRoute
+  '/planning': typeof PlanningRoute
+  '/vehicules': typeof VehiculesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/agent-ia'
+    | '/chauffeurs'
+    | '/circuits'
+    | '/dashboard'
+    | '/eleves'
+    | '/planning'
+    | '/vehicules'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/agent-ia'
+    | '/chauffeurs'
+    | '/circuits'
+    | '/dashboard'
+    | '/eleves'
+    | '/planning'
+    | '/vehicules'
+  id:
+    | '__root__'
+    | '/'
+    | '/agent-ia'
+    | '/chauffeurs'
+    | '/circuits'
+    | '/dashboard'
+    | '/eleves'
+    | '/planning'
+    | '/vehicules'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AgentIaRoute: typeof AgentIaRoute
+  ChauffeursRoute: typeof ChauffeursRoute
+  CircuitsRoute: typeof CircuitsRoute
+  DashboardRoute: typeof DashboardRoute
+  ElevesRoute: typeof ElevesRoute
+  PlanningRoute: typeof PlanningRoute
+  VehiculesRoute: typeof VehiculesRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +143,67 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/agent-ia': {
+      id: '/agent-ia'
+      path: '/agent-ia'
+      fullPath: '/agent-ia'
+      preLoaderRoute: typeof AgentIaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/chauffeurs': {
+      id: '/chauffeurs'
+      path: '/chauffeurs'
+      fullPath: '/chauffeurs'
+      preLoaderRoute: typeof ChauffeursRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/circuits': {
+      id: '/circuits'
+      path: '/circuits'
+      fullPath: '/circuits'
+      preLoaderRoute: typeof CircuitsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/eleves': {
+      id: '/eleves'
+      path: '/eleves'
+      fullPath: '/eleves'
+      preLoaderRoute: typeof ElevesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/planning': {
+      id: '/planning'
+      path: '/planning'
+      fullPath: '/planning'
+      preLoaderRoute: typeof PlanningRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/vehicules': {
+      id: '/vehicules'
+      path: '/vehicules'
+      fullPath: '/vehicules'
+      preLoaderRoute: typeof VehiculesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AgentIaRoute: AgentIaRoute,
+  ChauffeursRoute: ChauffeursRoute,
+  CircuitsRoute: CircuitsRoute,
+  DashboardRoute: DashboardRoute,
+  ElevesRoute: ElevesRoute,
+  PlanningRoute: PlanningRoute,
+  VehiculesRoute: VehiculesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
