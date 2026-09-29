@@ -11,3 +11,6 @@
 
 - Keep all MVP data and interactions client-side using centralized mock data because the approved demo explicitly excludes backend services.
 - Use dedicated TanStack routes for every navigation destination so each major module remains directly accessible and metadata-ready.
+
+## Technical decisions
+- Keep cross-module demo state in a client-side React context backed by centralized mock seed data, because this MVP explicitly excludes backend persistence.

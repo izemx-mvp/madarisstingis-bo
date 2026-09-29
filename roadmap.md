@@ -1,10 +1,9 @@
-# MVP Madariss TINGIS
+# Phase de finition fonctionnelle
 
-- [x] Connexion de démonstration et identité visuelle
-- [x] Navigation et tableau de bord
-- [x] Élèves et import simulé
-- [x] Véhicules, chauffeurs et circuits
-- [x] Agent IA et résultats simulés
-- [x] Planning interactif
-- [x] Entrées des modules de phase 2
-- [x] Vérifications desktop et tablette
+- [ ] Ajouter les données et l’état partagé pour maintenance, incidents, notifications et activité
+- [ ] Finaliser Maintenance et Incidents avec formulaires, détails et actions locales
+- [ ] Relier les KPI, alertes, recherche globale et notifications
+- [ ] Construire Analytics et son assistant IA simulé
+- [ ] Finaliser Paramètres et historique d’activité
+- [ ] Enrichir tables, filtres, actions groupées et retours utilisateur
+- [ ] Harmoniser les pages existantes et valider le scénario de démonstration
