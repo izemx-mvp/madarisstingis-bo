@@ -1,0 +1,20 @@
+import { useState } from "react";
+import { FileSpreadsheet, UploadCloud } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { toast } from "sonner";
+
+export function StudentDialog({ trigger }: { trigger: React.ReactNode }) {
+  const [open, setOpen] = useState(false);
+  return <Dialog open={open} onOpenChange={setOpen}><DialogTrigger asChild>{trigger}</DialogTrigger><DialogContent className="max-w-2xl"><DialogHeader><DialogTitle>Ajouter un élève</DialogTitle><DialogDescription>Les informations sont enregistrées uniquement pour cette démonstration.</DialogDescription></DialogHeader><div className="grid gap-4 py-2 sm:grid-cols-2">{["Prénom", "Nom", "Adresse", "Téléphone parent", "Point de ramassage"].map((x) => <div className={x === "Adresse" ? "sm:col-span-2" : ""} key={x}><Label>{x}</Label><Input className="mt-1.5" placeholder={x} /></div>)}<div><Label>Niveau</Label><Select><SelectTrigger className="mt-1.5 w-full"><SelectValue placeholder="Choisir" /></SelectTrigger><SelectContent>{["Maternelle", "Primaire", "Collège", "Lycée"].map(x => <SelectItem key={x} value={x}>{x}</SelectItem>)}</SelectContent></Select></div><div><Label>Quartier</Label><Input className="mt-1.5" placeholder="Quartier" /></div><div className="flex items-center justify-between rounded-md border p-3 sm:col-span-2"><Label>Besoin de transport scolaire</Label><Switch defaultChecked /></div></div><DialogFooter><Button variant="outline" onClick={() => setOpen(false)}>Annuler</Button><Button onClick={() => { setOpen(false); toast.success("Élève ajouté avec succès"); }}>Créer l’élève</Button></DialogFooter></DialogContent></Dialog>;
+}
+
+export function ImportDialog() {
+  const [step, setStep] = useState(1);
+  const [open, setOpen] = useState(false);
+  return <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) setStep(1); }}><DialogTrigger asChild><Button variant="outline"><UploadCloud />Importer un fichier</Button></DialogTrigger><DialogContent className="max-w-2xl"><DialogHeader><DialogTitle>Importer des élèves</DialogTitle><DialogDescription>Étape {step} sur 3 · Excel ou CSV</DialogDescription></DialogHeader>{step === 1 && <div className="grid place-items-center rounded-lg border-2 border-dashed border-secondary/40 bg-secondary/5 px-6 py-12 text-center"><FileSpreadsheet className="mb-3 size-10 text-secondary" /><p className="font-semibold">Déposez votre fichier ici</p><p className="mt-1 text-sm text-muted-foreground">ou cliquez pour parcourir vos fichiers</p></div>}{step === 2 && <div className="space-y-3">{["Prénom → Prénom", "Nom → Nom", "Classe → Classe", "Adresse → Adresse", "Quartier → Quartier"].map(x => <div key={x} className="flex items-center justify-between rounded-md border p-3 text-sm"><span>{x.split(" → ")[0]}</span><span className="font-semibold text-secondary">{x.split(" → ")[1]}</span></div>)}</div>}{step === 3 && <div className="grid grid-cols-3 gap-3 py-6 text-center"><div className="rounded-md bg-muted p-4"><b className="block text-2xl">128</b><span className="text-xs">détectés</span></div><div className="rounded-md bg-success-soft p-4 text-success"><b className="block text-2xl">123</b><span className="text-xs">valides</span></div><div className="rounded-md bg-warning-soft p-4 text-warning-foreground"><b className="block text-2xl">5</b><span className="text-xs">à vérifier</span></div></div>}<DialogFooter><Button variant="outline" disabled={step === 1} onClick={() => setStep((s) => s - 1)}>Retour</Button><Button onClick={() => step < 3 ? setStep((s) => s + 1) : (setOpen(false), toast.success("123 élèves importés"))}>{step === 3 ? "Terminer" : "Continuer"}</Button></DialogFooter></DialogContent></Dialog>;
+}
