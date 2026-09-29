@@ -10,7 +10,6 @@ import { Input } from "@/components/ui/input";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import logo from "@/assets/madariss-tingis-logo.png.asset.json";
 import { cn } from "@/lib/utils";
 import { circuits, drivers, students, vehicles } from "@/lib/mock-data";
 import { useDemo } from "@/lib/demo-state";
@@ -47,7 +46,7 @@ export function AppShell({ title, eyebrow, children }: { title: string; eyebrow?
       <div className="min-h-screen bg-background lg:flex">
         <aside className={cn("sticky top-0 z-30 hidden h-screen shrink-0 border-r border-sidebar-border bg-sidebar transition-all duration-300 lg:flex lg:flex-col", collapsed ? "w-[76px]" : "w-[272px]")}> 
           <div className="flex h-20 items-center border-b border-sidebar-border px-4">
-            <img src={logo.url} alt="Madariss TINGIS" className={cn("h-11 object-contain object-left", collapsed ? "w-10 object-cover" : "w-48")} />
+            <img src="/madariss-tingis-logo.png" alt="Madariss TINGIS" className={cn("h-11 object-contain object-left", collapsed ? "w-10 object-cover" : "w-48")} />
           </div>
           <nav className="flex-1 space-y-1 overflow-y-auto p-3">
             {nav.map(([to, label, Icon]) => {
