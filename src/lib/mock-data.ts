@@ -64,7 +64,7 @@ export const circuits = districts.slice(0, 10).map((district, i) => ({
   students: [42, 38, 29, 31, 44, 27, 36, 24, 40, 35][i],
   capacity: [45, 45, 35, 35, 45, 30, 45, 30, 45, 35][i],
   vehicle: `B-${String(i + 1).padStart(2, "0")}`,
-  driver: driverNames[i],
+  driver: driverNames[i] ?? "Ahmed Benali",
   time: `0${6 + (i % 2)}:${i % 2 ? "15" : "30"}`,
   status: i === 8 ? "Généré par IA" : "Planifié",
 }));
