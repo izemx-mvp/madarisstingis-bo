@@ -75,3 +75,63 @@ export const schedule = circuits.slice(0, 6).map((c, i) => ({
   end: ["08:00", "08:10", "08:20", "13:05", "16:55", "17:25"][i],
   conflict: i === 4,
 }));
+
+export type MaintenanceRecord = {
+  id: string; vehicle: string; type: string; plannedDate: string; interventionDate: string;
+  provider: string; cost: number; status: "Planifiée" | "En cours" | "Terminée" | "Reportée";
+  priority: "Faible" | "Moyenne" | "Haute" | "Urgente"; description: string; notes: string;
+};
+
+const maintenanceTypes = ["Vidange", "Freinage", "Pneumatiques", "Révision", "Contrôle technique", "Batterie", "Climatisation", "Autre"];
+export const maintenanceSeed: MaintenanceRecord[] = Array.from({ length: 20 }, (_, i) => ({
+  id: `M-${String(101 + i).padStart(3, "0")}`,
+  vehicle: `B-${String((i % 14) + 1).padStart(2, "0")}`,
+  type: maintenanceTypes[i % maintenanceTypes.length] ?? "Révision",
+  plannedDate: `${String(2 + (i % 26)).padStart(2, "0")}/10/2026`,
+  interventionDate: i < 7 ? `${String(1 + (i % 20)).padStart(2, "0")}/09/2026` : "—",
+  provider: ["Atlas Auto", "Tanger Pneus", "Garage Al Boughaz", "Auto Service Nord"][i % 4] ?? "Atlas Auto",
+  cost: 650 + (i % 7) * 430,
+  status: (["Planifiée", "En cours", "Terminée", "Reportée"] as const)[i % 4] ?? "Planifiée",
+  priority: (["Moyenne", "Haute", "Faible", "Urgente"] as const)[i % 4] ?? "Moyenne",
+  description: `Intervention préventive sur le bus B-${String((i % 14) + 1).padStart(2, "0")} selon le planning de flotte.`,
+  notes: "Contrôle complet et compte rendu du prestataire requis.",
+}));
+
+export type IncidentRecord = {
+  id: string; date: string; vehicle: string; driver: string; circuit: string; type: string;
+  severity: "Faible" | "Moyenne" | "Élevée"; description: string;
+  status: "Nouveau" | "En traitement" | "Résolu" | "Clos"; comment: string;
+};
+
+const incidentTypes = ["Panne mécanique", "Crevaison", "Accident mineur", "Retard important", "Véhicule indisponible", "Problème de porte", "Autre"];
+export const incidentSeed: IncidentRecord[] = Array.from({ length: 15 }, (_, i) => ({
+  id: `INC-${String(240 + i).padStart(3, "0")}`,
+  date: `${String(8 + (i % 20)).padStart(2, "0")}/09/2026 · 0${7 + (i % 2)}:${String(12 + i * 3).slice(-2)}`,
+  vehicle: `B-${String((i % 14) + 1).padStart(2, "0")}`,
+  driver: driverNames[i % driverNames.length] ?? "Ahmed Benali",
+  circuit: `C-${String((i % 10) + 1).padStart(2, "0")}`,
+  type: incidentTypes[i % incidentTypes.length] ?? "Autre",
+  severity: (["Faible", "Moyenne", "Élevée"] as const)[i % 3] ?? "Faible",
+  description: ["Voyant moteur signalé au départ", "Retard lié à la circulation", "Porte arrière à contrôler", "Pneumatique remplacé avant tournée"][i % 4] ?? "Signalement transport",
+  status: i < 3 ? "En traitement" : i < 9 ? "Résolu" : "Clos",
+  comment: "Le responsable flotte a été informé et le suivi est enregistré.",
+}));
+
+export type NotificationItem = { id: number; title: string; detail: string; time: string; read: boolean; tone: "info" | "warning" | "success" };
+export const notificationSeed: NotificationItem[] = Array.from({ length: 20 }, (_, i) => ({
+  id: i + 1,
+  title: ["Maintenance prévue demain", "Circuit C-03 généré avec succès", "Bus B-07 indisponible", "Nouvel incident B-11", "6 élèves sans circuit", "Simulation IA terminée"][i % 6] ?? "Mise à jour transport",
+  detail: ["Une intervention nécessite votre validation.", "La proposition est prête à être consultée.", "Un véhicule de remplacement est recommandé."][i % 3] ?? "Information disponible.",
+  time: i < 2 ? "Il y a 10 min" : i < 6 ? "Aujourd’hui" : "Cette semaine",
+  read: i > 5,
+  tone: i % 3 === 0 ? "warning" : i % 3 === 1 ? "success" : "info",
+}));
+
+export const activitySeed = Array.from({ length: 24 }, (_, i) => ({
+  id: i + 1,
+  user: ["Nadia El Amrani", "Youssef Berrada", "Salma Alaoui", "Karim Tazi"][i % 4] ?? "Administration",
+  date: `${String(29 - (i % 8)).padStart(2, "0")}/09/2026`,
+  time: `${String(8 + (i % 9)).padStart(2, "0")}:${String(10 + i * 2).slice(-2)}`,
+  action: ["Élève ajouté", "Circuit généré par IA", "Bus marqué en maintenance", "Incident créé", "Maintenance clôturée", "Affectation chauffeur modifiée"][i % 6] ?? "Mise à jour",
+  entity: ["Élève MT-2642", "Circuit C-06", "Bus B-03", "Incident INC-240", "Maintenance M-108", "Chauffeur Ahmed Benali"][i % 6] ?? "Transport",
+}));
