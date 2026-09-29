@@ -1,3 +1,3 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { PlaceholderPage } from "@/pages/placeholder-page";
-export const Route = createFileRoute("/maintenance")({ head:()=>({meta:[{title:"Maintenance — Madariss TINGIS"},{name:"description",content:"Espace de maintenance de la flotte."},{property:"og:title",content:"Maintenance flotte"},{property:"og:description",content:"Suivi de la maintenance scolaire."},{property:"og:type",content:"website"},{name:"twitter:card",content:"summary_large_image"}]}), component:()=> <PlaceholderPage type="Maintenance"/> });
+import { MaintenancePage } from "@/pages/operations-pages";
+export const Route = createFileRoute("/maintenance")({ head:()=>({meta:[{title:"Maintenance — Madariss TINGIS"},{name:"description",content:"Espace de maintenance de la flotte."},{property:"og:title",content:"Maintenance flotte"},{property:"og:description",content:"Suivi de la maintenance scolaire."},{property:"og:type",content:"website"},{name:"twitter:card",content:"summary_large_image"}]}), component: MaintenancePage });

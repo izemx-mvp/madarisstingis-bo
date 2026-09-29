@@ -1,3 +1,3 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { PlaceholderPage } from "@/pages/placeholder-page";
-export const Route = createFileRoute("/parametres")({ head:()=>({meta:[{title:"Paramètres — Madariss TINGIS"},{name:"description",content:"Paramètres de la plateforme transport."},{property:"og:title",content:"Paramètres transport"},{property:"og:description",content:"Configuration de la plateforme."},{property:"og:type",content:"website"},{name:"twitter:card",content:"summary_large_image"}]}), component:()=> <PlaceholderPage type="Paramètres"/> });
+import { SettingsPage } from "@/pages/settings-page";
+export const Route = createFileRoute("/parametres")({ head:()=>({meta:[{title:"Paramètres — Madariss TINGIS"},{name:"description",content:"Paramètres de la plateforme transport."},{property:"og:title",content:"Paramètres transport"},{property:"og:description",content:"Configuration de la plateforme."},{property:"og:type",content:"website"},{name:"twitter:card",content:"summary_large_image"}]}), component: SettingsPage });
