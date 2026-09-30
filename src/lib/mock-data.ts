@@ -1,80 +1,73 @@
-export type Student = {
-  id: number;
-  matricule: string;
-  name: string;
-  level: string;
-  classroom: string;
-  address: string;
-  district: string;
-  circuit: string;
-  pickup: string;
-  status: "Affecté" | "À affecter";
-};
+// Données de base simulées (aucune donnée réelle). L'organisation des circuits est calculée par transport-engine.ts.
+export const TODAY = "2026-09-30";
 
-const firstNames = ["Aya", "Adam", "Yasmine", "Omar", "Lina", "Youssef", "Salma", "Mehdi", "Inès", "Amine", "Meryem", "Ilyas", "Sara", "Anas", "Nour", "Zakaria"];
-const lastNames = ["Benjelloun", "El Amrani", "Alaoui", "Bennani", "Idrissi", "Berrada", "Lahlou", "Tazi", "Chraïbi", "Fassi", "Amrani", "Skalli"];
 export const districts = ["Ziaten", "Route de Rabat", "Mesnana", "Iberia", "Centre-ville", "Malabata", "Boubana", "Achakar", "Branes", "Moujahidine", "Val Fleuri"];
-const levels = ["Maternelle", "Primaire", "Collège", "Lycée"];
-const streets = ["Rue Al Amal", "Avenue Moulay Rachid", "Rue Ibn Battouta", "Boulevard Pasteur", "Route de Tétouan", "Rue Al Andalous"];
+export const districtCenters: Record<string, [number, number]> = {
+  Ziaten: [120, 385], "Route de Rabat": [300, 410], Mesnana: [185, 300], Iberia: [365, 185], "Centre-ville": [440, 160],
+  Malabata: [610, 150], Boubana: [130, 205], Achakar: [60, 135], Branes: [250, 225], Moujahidine: [480, 305], "Val Fleuri": [405, 340],
+};
+const rand = (n: number) => { const x = Math.sin(n * 12.9898) * 43758.5453; return x - Math.floor(x); };
+export function pointInDistrict(district: string, seed: number): [number, number] {
+  const [cx, cy] = districtCenters[district] ?? [350, 300];
+  return [Math.round(cx + (rand(seed) - 0.5) * 70), Math.round(cy + (rand(seed + 99) - 0.5) * 55)];
+}
+export const toGeo = (x: number, y: number) => `${(35.805 - y * 0.00012).toFixed(4)}°N, ${(5.885 - x * 0.00014).toFixed(4)}°O`;
 
-export const students: Student[] = Array.from({ length: 108 }, (_, i) => {
+export type Student = { id: number; matricule: string; name: string; level: string; classroom: string; address: string; district: string; x: number; y: number; recent?: boolean };
+
+const firstNames = ["Aya", "Adam", "Yasmine", "Omar", "Lina", "Youssef", "Salma", "Mehdi", "Inès", "Amine", "Meryem", "Ilyas", "Sara", "Anas", "Nour", "Zakaria", "Hiba", "Rayan", "Kenza", "Hamza", "Malak", "Ayoub", "Rim", "Othmane"];
+const lastNames = ["Benjelloun", "El Amrani", "Alaoui", "Bennani", "Idrissi", "Berrada", "Lahlou", "Tazi", "Chraïbi", "Fassi", "Amrani", "Skalli", "Ouazzani", "Kettani", "Sefrioui", "Bouzidi", "Tahiri"];
+const levels = ["Maternelle", "Primaire", "Collège", "Lycée"];
+const classesByLevel: Record<string, string[]> = { Maternelle: ["PS", "MS", "GS"], Primaire: ["CP", "CE1", "CE2", "CM1", "CM2", "6e P"], Collège: ["1re AC", "2e AC", "3e AC"], Lycée: ["TC", "1re Bac", "2e Bac"] };
+const streets = ["Rue Al Amal", "Avenue Moulay Rachid", "Rue Ibn Battouta", "Boulevard Pasteur", "Route de Tétouan", "Rue Al Andalous", "Avenue Mohammed VI", "Rue Ibn Khaldoun", "Rue de Fès"];
+
+export const students: Student[] = Array.from({ length: 426 }, (_, i) => {
   const district = districts[i % districts.length] ?? "Centre-ville";
-  const level = levels[i % levels.length] ?? "Primaire";
+  const level = levels[(i * 7) % levels.length] ?? "Primaire";
+  const cls = classesByLevel[level] ?? ["CP"];
+  const [x, y] = pointInDistrict(district, i + 1);
   return {
-    id: i + 1,
-    matricule: `MT-${String(2601 + i).padStart(4, "0")}`,
-    name: `${firstNames[i % firstNames.length] ?? "Aya"} ${lastNames[(i * 3) % lastNames.length] ?? "Bennani"}`,
-    level,
-    classroom: `${["A", "B", "C"][i % 3]}${(i % 6) + 1}`,
-    address: `${12 + ((i * 7) % 88)}, ${streets[i % streets.length] ?? "Rue Al Amal"}`,
-    district,
-    circuit: i % 22 === 0 ? "—" : `C-${String((i % 10) + 1).padStart(2, "0")}`,
-    pickup: `Arrêt ${district} ${String.fromCharCode(65 + (i % 4))}`,
-    status: i % 22 === 0 ? "À affecter" : "Affecté",
+    id: i + 1, matricule: `MT-${String(2601 + i)}`,
+    name: `${firstNames[(i * 5) % firstNames.length]} ${lastNames[(i * 3 + Math.floor(i / 17)) % lastNames.length]}`,
+    level, classroom: `${cls[i % cls.length]} ${["A", "B", "C"][i % 3]}`,
+    address: `${3 + ((i * 7) % 96)}, ${streets[(i * 5) % streets.length]}, ${district}`, district, x, y, recent: i >= 421,
   };
 });
 
-export const vehicles = Array.from({ length: 14 }, (_, i) => ({
-  id: `B-${String(i + 1).padStart(2, "0")}`,
-  plate: `${12000 + i * 137}-A-${40 + (i % 9)}`,
-  brand: ["Toyota", "Mercedes", "Isuzu", "Ford"][i % 4],
-  model: ["Coaster", "Sprinter", "Turquoise", "Transit"][i % 4],
-  capacity: [30, 45, 35, 28][i % 4],
-  year: 2019 + (i % 6),
-  status: i === 2 || i === 8 ? "Maintenance" : i === 6 ? "Indisponible" : i < 12 ? "Affecté" : "Disponible",
-  circuit: i === 10 ? "C-03" : i === 11 ? "C-09" : i < 10 && i !== 2 && i !== 8 ? `C-${String(i + 1).padStart(2, "0")}` : "Non affecté",
-  maintenance: `${4 + i} oct. 2026`,
+export type VehicleBaseStatus = "Disponible" | "Maintenance" | "Indisponible" | "Incident" | "Panne";
+export type Vehicle = { id: string; plate: string; brand: string; model: string; capacity: number; year: number; baseStatus: VehicleBaseStatus; nextDue: string };
+const fleet: [string, string, number, VehicleBaseStatus][] = [
+  ["Mercedes", "Tourismo", 72, "Disponible"], ["Irisbus", "Crossway", 76, "Disponible"], ["Mercedes", "Intouro", 74, "Disponible"], ["Iveco", "Evadys", 78, "Disponible"],
+  ["Mercedes", "Intouro", 72, "Disponible"], ["Isuzu", "Visigo", 74, "Disponible"], ["Irisbus", "Crossway", 74, "Disponible"], ["Toyota", "Coaster", 30, "Maintenance"],
+  ["Isuzu", "Novo", 35, "Maintenance"], ["Mercedes", "Sprinter", 22, "Indisponible"], ["Ford", "Transit", 18, "Incident"], ["Isuzu", "Turquoise", 45, "Maintenance"],
+  ["Toyota", "Coaster", 30, "Indisponible"], ["Mercedes", "Sprinter", 22, "Indisponible"],
+];
+export const vehicles: Vehicle[] = fleet.map(([brand, model, capacity, baseStatus], i) => ({
+  id: `B-${String(i + 1).padStart(2, "0")}`, plate: `${24810 + i * 137}-A-40`, brand, model, capacity, year: 2019 + (i % 6), baseStatus,
+  nextDue: `2026-10-${String(4 + i).padStart(2, "0")}`,
 }));
 
-const driverNames = ["Ahmed Benali", "Karim El Idrissi", "Mohamed Tazi", "Yassine Lahlou", "Rachid Bennani", "Samir Berrada", "Nabil Alaoui", "Hamza Chraïbi", "Othmane Fassi", "Adil Skalli", "Soufiane Amrani", "Khalid El Fassi", "Reda Benjelloun", "Mourad Idrissi", "Abdelilah Tazi"];
-export const drivers = driverNames.map((name, i) => ({
-  id: i + 1,
-  name,
-  phone: `+212 6 ${String(12 + i).padStart(2, "0")} ${34 + i} ${56 + i} ${70 + i}`,
-  status: i === 12 ? "Absent" : i === 13 ? "Congé" : i < 10 ? "Affecté" : "Disponible",
-  vehicle: i < 10 ? `B-${String(i + 1).padStart(2, "0")}` : "—",
-  circuit: i < 10 ? `C-${String(i + 1).padStart(2, "0")}` : "—",
-  hours: "06:45 – 17:30",
+export type DocumentRecord = { id: string; owner: string; type: string; number: string; issued: string; expires: string; file: string };
+const vehicleDocTypes = ["Carte grise", "Assurance", "Visite technique", "Autorisation de transport scolaire"];
+export const vehicleDocumentSeed: DocumentRecord[] = vehicles.flatMap((v, i) => vehicleDocTypes.map((type, t) => {
+  const special: Record<string, string> = { "B-04|Assurance": "2026-10-15", "B-06|Visite technique": "2026-10-20", "B-10|Assurance": "2026-09-20", "B-01|Autorisation de transport scolaire": "2026-11-12" };
+  const expires = special[`${v.id}|${type}`] ?? (type === "Carte grise" ? "2031-01-01" : `2027-0${1 + ((i + t) % 8)}-1${t}`);
+  return { id: `${v.id}-D${t + 1}`, owner: v.id, type, number: `${["CG", "ASS", "VT", "AUT"][t]}-${45200 + i * 31 + t * 7}`, issued: `2026-0${1 + ((i + t) % 8)}-1${t}`, expires, file: `${type.toLowerCase().replaceAll(" ", "-")}-${v.id}.pdf` };
 }));
 
-export const circuits = districts.slice(0, 10).map((district, i) => ({
-  id: `C-${String(i + 1).padStart(2, "0")}`,
-  name: `${district} / ${districts[(i + 1) % districts.length]}`,
-  zone: district,
-  students: [42, 38, 29, 31, 44, 27, 36, 24, 40, 35][i],
-  capacity: [45, 45, 35, 35, 45, 30, 45, 30, 45, 35][i],
-  vehicle: i === 2 ? "B-11" : i === 8 ? "B-12" : `B-${String(i + 1).padStart(2, "0")}`,
-  driver: driverNames[i] ?? "Ahmed Benali",
-  time: `0${6 + (i % 2)}:${i % 2 ? "15" : "30"}`,
-  status: i === 8 ? "Généré par IA" : "Planifié",
-}));
-
-export const schedule = circuits.slice(0, 6).map((c, i) => ({
-  ...c,
-  start: ["06:45", "07:00", "07:10", "12:10", "15:45", "16:15"][i],
-  end: ["08:00", "08:10", "08:20", "13:05", "16:55", "17:25"][i],
-  conflict: i === 4,
-}));
+export type DriverBaseStatus = "Disponible" | "Absent" | "Malade" | "Congé" | "Indisponible";
+export type Driver = { id: number; firstName: string; lastName: string; name: string; phone: string; address: string; district: string; x: number; y: number; baseStatus: DriverBaseStatus; license: string; category: string; licenseIssued: string; licenseExpires: string };
+const roster: [string, string, string, DriverBaseStatus][] = [
+  ["Ahmed", "Benali", "Ziaten", "Disponible"], ["Karim", "El Idrissi", "Malabata", "Disponible"], ["Mohamed", "Tazi", "Mesnana", "Disponible"], ["Yassine", "Lahlou", "Iberia", "Disponible"],
+  ["Rachid", "Bennani", "Moujahidine", "Disponible"], ["Samir", "Berrada", "Achakar", "Disponible"], ["Nabil", "Alaoui", "Route de Rabat", "Disponible"], ["Hamza", "Chraïbi", "Val Fleuri", "Disponible"],
+  ["Othmane", "Fassi", "Boubana", "Absent"], ["Adil", "Skalli", "Centre-ville", "Malade"], ["Soufiane", "Amrani", "Branes", "Congé"], ["Khalid", "El Fassi", "Ziaten", "Absent"],
+  ["Reda", "Benjelloun", "Malabata", "Malade"], ["Mourad", "Idrissi", "Iberia", "Congé"], ["Abdelilah", "Tazi", "Mesnana", "Indisponible"],
+];
+export const driverRoster: Driver[] = roster.map(([firstName, lastName, district, baseStatus], i) => {
+  const [x, y] = pointInDistrict(district, 700 + i);
+  const expires = i === 0 ? "2026-10-30" : i === 4 ? "2026-11-14" : i === 9 ? "2026-09-25" : `202${8 + (i % 3)}-0${1 + (i % 9)}-15`;
+  return { id: i + 1, firstName, lastName, name: `${firstName} ${lastName}`, phone: `+212 6 ${61 + i} ${24 + i} ${38 + i} ${50 + i}`, address: `${10 + i * 4}, ${streets[i % streets.length]}, ${district}`, district, x, y, baseStatus, license: `P-${908100 + i * 173}`, category: i % 4 === 3 ? "D1" : "D", licenseIssued: `20${10 + (i % 10)}-03-1${i % 9}`, licenseExpires: expires };
+});
 
 export type MaintenanceRecord = {
   id: string; vehicle: string; type: string; plannedDate: string; interventionDate: string;
@@ -108,8 +101,8 @@ export const incidentSeed: IncidentRecord[] = Array.from({ length: 15 }, (_, i) 
   id: `INC-${String(240 + i).padStart(3, "0")}`,
   date: `${String(8 + (i % 20)).padStart(2, "0")}/09/2026 · 0${7 + (i % 2)}:${String(12 + i * 3).slice(-2)}`,
   vehicle: `B-${String((i % 14) + 1).padStart(2, "0")}`,
-  driver: driverNames[i % driverNames.length] ?? "Ahmed Benali",
-  circuit: `C-${String((i % 10) + 1).padStart(2, "0")}`,
+  driver: driverRoster[i % driverRoster.length]?.name ?? "Ahmed Benali",
+  circuit: `C-${String((i % 7) + 1).padStart(2, "0")}`,
   type: incidentTypes[i % incidentTypes.length] ?? "Autre",
   severity: (["Faible", "Moyenne", "Élevée"] as const)[i % 3] ?? "Faible",
   description: ["Voyant moteur signalé au départ", "Retard lié à la circulation", "Porte arrière à contrôler", "Pneumatique remplacé avant tournée"][i % 4] ?? "Signalement transport",
