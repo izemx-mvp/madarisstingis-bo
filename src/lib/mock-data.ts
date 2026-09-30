@@ -21,7 +21,7 @@ const levels = ["Maternelle", "Primaire", "Collège", "Lycée"];
 const classesByLevel: Record<string, string[]> = { Maternelle: ["PS", "MS", "GS"], Primaire: ["CP", "CE1", "CE2", "CM1", "CM2", "6e P"], Collège: ["1re AC", "2e AC", "3e AC"], Lycée: ["TC", "1re Bac", "2e Bac"] };
 const streets = ["Rue Al Amal", "Avenue Moulay Rachid", "Rue Ibn Battouta", "Boulevard Pasteur", "Route de Tétouan", "Rue Al Andalous", "Avenue Mohammed VI", "Rue Ibn Khaldoun", "Rue de Fès"];
 
-export const students: Student[] = Array.from({ length: 426 }, (_, i) => {
+export const students: Student[] = Array.from({ length: 200 }, (_, i) => {
   const district = districts[i % districts.length] ?? "Centre-ville";
   const level = levels[(i * 7) % levels.length] ?? "Primaire";
   const cls = classesByLevel[level] ?? ["CP"];
@@ -30,17 +30,15 @@ export const students: Student[] = Array.from({ length: 426 }, (_, i) => {
     id: i + 1, matricule: `MT-${String(2601 + i)}`,
     name: `${firstNames[(i * 5) % firstNames.length]} ${lastNames[(i * 3 + Math.floor(i / 17)) % lastNames.length]}`,
     level, classroom: `${cls[i % cls.length]} ${["A", "B", "C"][i % 3]}`,
-    address: `${3 + ((i * 7) % 96)}, ${streets[(i * 5) % streets.length]}, ${district}`, district, x, y, recent: i >= 421,
+    address: `${3 + ((i * 7) % 96)}, ${streets[(i * 5) % streets.length]}, ${district}`, district, x, y, recent: i >= 195,
   };
 });
 
 export type VehicleBaseStatus = "Disponible" | "Maintenance" | "Indisponible" | "Incident" | "Panne";
 export type Vehicle = { id: string; plate: string; brand: string; model: string; capacity: number; year: number; baseStatus: VehicleBaseStatus; nextDue: string };
 const fleet: [string, string, number, VehicleBaseStatus][] = [
-  ["Mercedes", "Tourismo", 72, "Disponible"], ["Irisbus", "Crossway", 76, "Disponible"], ["Mercedes", "Intouro", 74, "Disponible"], ["Iveco", "Evadys", 78, "Disponible"],
-  ["Mercedes", "Intouro", 72, "Disponible"], ["Isuzu", "Visigo", 74, "Disponible"], ["Irisbus", "Crossway", 74, "Disponible"], ["Toyota", "Coaster", 30, "Maintenance"],
-  ["Isuzu", "Novo", 35, "Maintenance"], ["Mercedes", "Sprinter", 22, "Indisponible"], ["Ford", "Transit", 18, "Incident"], ["Isuzu", "Turquoise", 45, "Maintenance"],
-  ["Toyota", "Coaster", 30, "Indisponible"], ["Mercedes", "Sprinter", 22, "Indisponible"],
+  ["Mercedes", "Sprinter", 30, "Disponible"], ["Toyota", "Coaster", 30, "Disponible"], ["Isuzu", "Turquoise", 32, "Disponible"], ["Iveco", "Daily", 30, "Disponible"],
+  ["Mercedes", "Sprinter", 28, "Disponible"], ["Toyota", "Coaster", 30, "Disponible"], ["Ford", "Transit", 28, "Disponible"],
 ];
 export const vehicles: Vehicle[] = fleet.map(([brand, model, capacity, baseStatus], i) => ({
   id: `B-${String(i + 1).padStart(2, "0")}`, plate: `${24810 + i * 137}-A-40`, brand, model, capacity, year: 2019 + (i % 6), baseStatus,
