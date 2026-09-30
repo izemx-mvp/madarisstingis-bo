@@ -11,11 +11,12 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
-import { circuits, drivers, students, vehicles } from "@/lib/mock-data";
+import { driverRoster as drivers, students, vehicles } from "@/lib/mock-data";
+import { circuits } from "@/lib/transport-engine";
 import { useDemo } from "@/lib/demo-state";
 
 const nav = [
-  ["/dashboard", "Tableau de bord", Gauge], ["/agent-ia", "Agent IA – Optimisation", Bot],
+  ["/dashboard", "Tableau de bord", Gauge], ["/agent-ia", "Centre IA – Optimisation", Bot],
   ["/circuits", "Circuits scolaires", RouteIcon], ["/eleves", "Élèves", GraduationCap],
   ["/vehicules", "Véhicules", Bus], ["/chauffeurs", "Chauffeurs", UsersRound],
   ["/planning", "Planning", CalendarDays], ["/maintenance", "Maintenance", Wrench],
@@ -32,9 +33,9 @@ export function AppShell({ title, eyebrow, children }: { title: string; eyebrow?
     if (query.trim().length < 2) return [];
     const q = query.toLowerCase();
     return [
-      ...students.map(x=>({title:x.name,detail:`Élève · ${x.matricule} · ${x.circuit}`,to:"/eleves" as const,search:JSON.stringify(x)})),
-      ...vehicles.map(x=>({title:`Véhicule ${x.id}`,detail:`${x.brand} ${x.model} · ${x.status}`,to:"/vehicules" as const,search:JSON.stringify(x)})),
-      ...drivers.map(x=>({title:x.name,detail:`Chauffeur · ${x.vehicle}`,to:"/chauffeurs" as const,search:JSON.stringify(x)})),
+      ...students.map(x=>({title:x.name,detail:`Élève · ${x.matricule} · ${x.district}`,to:"/eleves" as const,search:JSON.stringify(x)})),
+      ...vehicles.map(x=>({title:`Véhicule ${x.id}`,detail:`${x.brand} ${x.model} · ${x.capacity} places`,to:"/vehicules" as const,search:JSON.stringify(x)})),
+      ...drivers.map(x=>({title:x.name,detail:`Chauffeur · ${x.district}`,to:"/chauffeurs" as const,search:JSON.stringify(x)})),
       ...circuits.map(x=>({title:`Circuit ${x.id}`,detail:x.name,to:"/circuits" as const,search:JSON.stringify(x)})),
       ...maintenances.map(x=>({title:`Maintenance ${x.id}`,detail:`${x.vehicle} · ${x.type}`,to:"/maintenance" as const,search:JSON.stringify(x)})),
       ...incidents.map(x=>({title:`Incident ${x.id}`,detail:`${x.vehicle} · ${x.type}`,to:"/incidents" as const,search:JSON.stringify(x)})),
