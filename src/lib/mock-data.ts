@@ -48,7 +48,7 @@ export const vehicles: Vehicle[] = fleet.map(([brand, model, capacity, baseStatu
 export type DocumentRecord = { id: string; owner: string; type: string; number: string; issued: string; expires: string; file: string };
 const vehicleDocTypes = ["Carte grise", "Assurance", "Visite technique", "Autorisation de transport scolaire"];
 export const vehicleDocumentSeed: DocumentRecord[] = vehicles.flatMap((v, i) => vehicleDocTypes.map((type, t) => {
-  const special: Record<string, string> = { "B-04|Assurance": "2026-10-15", "B-06|Visite technique": "2026-10-20", "B-10|Assurance": "2026-09-20", "B-01|Autorisation de transport scolaire": "2026-11-12" };
+  const special: Record<string, string> = { "B-04|Assurance": "2026-10-15", "B-06|Visite technique": "2026-10-20", "B-05|Assurance": "2026-09-20", "B-01|Autorisation de transport scolaire": "2026-11-12" };
   const expires = special[`${v.id}|${type}`] ?? (type === "Carte grise" ? "2031-01-01" : `2027-0${1 + ((i + t) % 8)}-1${t}`);
   return { id: `${v.id}-D${t + 1}`, owner: v.id, type, number: `${["CG", "ASS", "VT", "AUT"][t]}-${45200 + i * 31 + t * 7}`, issued: `2026-0${1 + ((i + t) % 8)}-1${t}`, expires, file: `${type.toLowerCase().replaceAll(" ", "-")}-${v.id}.pdf` };
 }));
@@ -76,7 +76,7 @@ export type MaintenanceRecord = {
 const maintenanceTypes = ["Vidange", "Freinage", "Pneumatiques", "Révision", "Contrôle technique", "Batterie", "Climatisation", "Autre"];
 export const maintenanceSeed: MaintenanceRecord[] = Array.from({ length: 20 }, (_, i) => ({
   id: `M-${String(101 + i).padStart(3, "0")}`,
-  vehicle: `B-${String((i % 14) + 1).padStart(2, "0")}`,
+  vehicle: `B-${String((i % 7) + 1).padStart(2, "0")}`,
   type: maintenanceTypes[i % maintenanceTypes.length] ?? "Révision",
   plannedDate: `${String(2 + (i % 26)).padStart(2, "0")}/10/2026`,
   interventionDate: i < 7 ? `${String(1 + (i % 20)).padStart(2, "0")}/09/2026` : "—",
@@ -84,7 +84,7 @@ export const maintenanceSeed: MaintenanceRecord[] = Array.from({ length: 20 }, (
   cost: 650 + (i % 7) * 430,
   status: (["Planifiée", "En cours", "Terminée", "Reportée"] as const)[i % 4] ?? "Planifiée",
   priority: (["Moyenne", "Haute", "Faible", "Urgente"] as const)[i % 4] ?? "Moyenne",
-  description: `Intervention préventive sur le bus B-${String((i % 14) + 1).padStart(2, "0")} selon le planning de flotte.`,
+  description: `Intervention préventive sur le bus B-${String((i % 7) + 1).padStart(2, "0")} selon le planning de flotte.`,
   notes: "Contrôle complet et compte rendu du prestataire requis.",
 }));
 
@@ -98,7 +98,7 @@ const incidentTypes = ["Panne mécanique", "Crevaison", "Accident mineur", "Reta
 export const incidentSeed: IncidentRecord[] = Array.from({ length: 15 }, (_, i) => ({
   id: `INC-${String(240 + i).padStart(3, "0")}`,
   date: `${String(8 + (i % 20)).padStart(2, "0")}/09/2026 · 0${7 + (i % 2)}:${String(12 + i * 3).slice(-2)}`,
-  vehicle: `B-${String((i % 14) + 1).padStart(2, "0")}`,
+  vehicle: `B-${String((i % 7) + 1).padStart(2, "0")}`,
   driver: driverRoster[i % driverRoster.length]?.name ?? "Ahmed Benali",
   circuit: `C-${String((i % 7) + 1).padStart(2, "0")}`,
   type: incidentTypes[i % incidentTypes.length] ?? "Autre",
@@ -111,7 +111,7 @@ export const incidentSeed: IncidentRecord[] = Array.from({ length: 15 }, (_, i) 
 export type NotificationItem = { id: number; title: string; detail: string; time: string; read: boolean; tone: "info" | "warning" | "success" };
 export const notificationSeed: NotificationItem[] = Array.from({ length: 20 }, (_, i) => ({
   id: i + 1,
-  title: ["Maintenance prévue demain", "Circuit C-03 généré avec succès", "Bus B-07 indisponible", "Nouvel incident B-11", "6 élèves sans circuit", "Simulation IA terminée"][i % 6] ?? "Mise à jour transport",
+  title: ["Maintenance prévue demain", "Circuit C-03 généré avec succès", "Bus B-05 indisponible", "Nouvel incident B-03", "6 élèves sans circuit", "Simulation IA terminée"][i % 6] ?? "Mise à jour transport",
   detail: ["Une intervention nécessite votre validation.", "La proposition est prête à être consultée.", "Un véhicule de remplacement est recommandé."][i % 3] ?? "Information disponible.",
   time: i < 2 ? "Il y a 10 min" : i < 6 ? "Aujourd’hui" : "Cette semaine",
   read: i > 5,
