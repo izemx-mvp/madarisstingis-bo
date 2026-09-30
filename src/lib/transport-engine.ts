@@ -8,7 +8,7 @@ export const CIRCUIT_COLORS = ["var(--primary)", "var(--secondary)", "var(--warn
 export type Stop = { student: Student; order: number; time: string };
 export type PlanCircuit = {
   id: string; color: string; zone: string; vehicleId: string; capacity: number; stops: Stop[];
-  firstPickup: string; arrival: string; returnDeparture: string; driverId?: number; driver?: string; justification?: string;
+  firstPickup: string; arrival: string; returnDeparture: string; driverId?: number | undefined; driver?: string | undefined; justification?: string | undefined;
   status: "Généré par IA" | "Validé" | "Suspendu"; distanceKm: number;
 };
 

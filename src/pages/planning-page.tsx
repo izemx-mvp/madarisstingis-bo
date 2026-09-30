@@ -11,7 +11,7 @@ import { SCHOOL, toMin, type PlanCircuit } from "@/lib/transport-engine";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
-type Ev = { time: string; kind: "circuit" | "arrivee" | "retour" | "maintenance" | "incident" | "absence"; title: string; detail: string; bus?: string; driver?: string; circuit?: string; color?: string; ref?: PlanCircuit };
+type Ev = { time: string; kind: "circuit" | "arrivee" | "retour" | "maintenance" | "incident" | "absence"; title: string; detail: string; bus?: string | undefined; driver?: string | undefined; circuit?: string | undefined; color?: string | undefined; ref?: PlanCircuit | undefined };
 const kindMeta = { circuit: ["Départ", Bus, "border-secondary bg-secondary/10"], arrivee: ["Arrivée", School, "border-success bg-success-soft"], retour: ["Retour", RotateCcw, "border-primary bg-primary/10"], maintenance: ["Maintenance", Wrench, "border-warning bg-warning-soft"], incident: ["Incident", ShieldAlert, "border-destructive bg-danger-soft"], absence: ["Absence", UserRoundX, "border-muted-foreground bg-muted"] } as const;
 const days = ["Lundi 28", "Mardi 29", "Mercredi 30", "Jeudi 1", "Vendredi 2"];
 

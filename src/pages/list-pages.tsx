@@ -99,7 +99,7 @@ export function CircuitsPage() {
     <CircuitSheet circuit={plan.find((c) => c.id === open)} plan={plan} onClose={() => setOpen(null)} /></AppShell>;
 }
 
-function CircuitSheet({ circuit, plan, onClose }: { circuit?: PlanCircuit; plan: PlanCircuit[]; onClose: () => void }) {
+function CircuitSheet({ circuit, plan, onClose }: { circuit?: PlanCircuit | undefined; plan: PlanCircuit[]; onClose: () => void }) {
   return <Sheet open={!!circuit} onOpenChange={(o) => !o && onClose()}><SheetContent className="w-full overflow-y-auto sm:max-w-3xl">{circuit && <><SheetHeader><SheetTitle>Circuit {circuit.id}</SheetTitle><SheetDescription>{circuit.zone} · {circuit.status}</SheetDescription></SheetHeader><div className="space-y-4 px-4 pb-6">{circuit.status === "Suspendu" ? <Empty text="Circuit suspendu : élèves redistribués par le plan de crise." /> : <><CircuitHeader c={circuit} /><TangerMap plan={plan} highlight={circuit.id} className="min-h-[360px]" /><StopList c={circuit} /></>}</div></>}</SheetContent></Sheet>;
 }
 
