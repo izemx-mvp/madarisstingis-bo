@@ -44,7 +44,7 @@ const fleet: [string, string, number, VehicleBaseStatus][] = [
 ];
 export const vehicles: Vehicle[] = fleet.map(([brand, model, capacity, baseStatus], i) => ({
   id: `B-${String(i + 1).padStart(2, "0")}`, plate: `${24810 + i * 137}-A-40`, brand, model, capacity, year: 2019 + (i % 6), baseStatus,
-  nextDue: `2026-10-${String(4 + i).padStart(2, "0")}`,
+  nextDue: i === 1 ? "2026-10-06" : `2026-11-${String(10 + i).padStart(2, "0")}`,
 }));
 
 export type DocumentRecord = { id: string; owner: string; type: string; number: string; issued: string; expires: string; file: string };
