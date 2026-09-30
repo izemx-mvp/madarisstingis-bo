@@ -12,7 +12,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Textarea } from "@/components/ui/textarea";
 import { useDemo } from "@/lib/demo-state";
-import { circuits, drivers, vehicles, type IncidentRecord, type MaintenanceRecord } from "@/lib/mock-data";
+import { driverRoster as drivers, vehicles, type IncidentRecord, type MaintenanceRecord } from "@/lib/mock-data";
+import { circuits } from "@/lib/transport-engine";
+import { CrisisPanel } from "@/components/crisis-panel";
 import { toast } from "sonner";
 
 type Kind = "maintenance" | "incident";
@@ -20,9 +22,9 @@ const maintenanceTypes = ["Vidange", "Freinage", "Pneumatiques", "Révision", "C
 const incidentTypes = ["Panne mécanique", "Crevaison", "Accident mineur", "Retard important", "Véhicule indisponible", "Problème de porte", "Autre"];
 
 export function MaintenancePage() { return <OperationsPage kind="maintenance" />; }
-export function IncidentsPage() { return <OperationsPage kind="incident" />; }
+export function IncidentsPage() { return <OperationsPage kind="incident" top={<CrisisPanel />} />; }
 
-function OperationsPage({ kind }: { kind: Kind }) {
+function OperationsPage({ kind, top }: { kind: Kind; top?: React.ReactNode }) {
   const demo = useDemo();
   const isMaintenance = kind === "maintenance";
   const data = isMaintenance ? demo.maintenances : demo.incidents;
@@ -34,6 +36,7 @@ function OperationsPage({ kind }: { kind: Kind }) {
   const closeSelected = () => { selected.forEach((id) => isMaintenance ? demo.updateMaintenance(id, { status: "Terminée" }) : demo.updateIncident(id, { status: "Clos" })); setSelected([]); toast.success(isMaintenance ? "Interventions clôturées" : "Incidents clôturés"); };
   const removeSelected = () => { selected.forEach((id) => isMaintenance ? demo.deleteMaintenance(id) : demo.deleteIncident(id)); setSelected([]); toast.success("Sélection supprimée"); };
   return <AppShell title={isMaintenance ? "Maintenance" : "Incidents"} eyebrow="Pilotage de la flotte">
+    {top}
     <div className="mb-6 grid gap-4 md:grid-cols-3"><Summary icon={isMaintenance ? Wrench : ShieldAlert} label={isMaintenance ? "Interventions actives" : "Incidents ouverts"} value={String(data.filter((x) => x.status === (isMaintenance ? "En cours" : "En traitement") || x.status === (isMaintenance ? "Planifiée" : "Nouveau")).length)} /><Summary icon={CalendarClock} label={isMaintenance ? "Prévues ce mois" : "Signalés ce mois"} value={String(data.length)} /><Summary icon={CheckCircle2} label={isMaintenance ? "Terminées" : "Résolus"} value={String(data.filter((x) => x.status === (isMaintenance ? "Terminée" : "Résolu")).length)} /></div>
     <section className="overflow-hidden rounded-lg border bg-card shadow-sm">
       <div className="flex flex-wrap items-center gap-3 border-b p-4"><div className="relative min-w-64 flex-1"><Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"/><Input value={query} onChange={(e)=>{setQuery(e.target.value);setPage(1)}} className="pl-9" placeholder={isMaintenance ? "Référence, véhicule, prestataire…" : "Référence, véhicule, chauffeur…"}/></div><Select value={status} onValueChange={setStatus}><SelectTrigger className="w-44"><Filter/><SelectValue placeholder="Statut"/></SelectTrigger><SelectContent><SelectItem value="all">Tous les statuts</SelectItem>{(isMaintenance?["Planifiée","En cours","Terminée","Reportée"]:["Nouveau","En traitement","Résolu","Clos"]).map(x=><SelectItem key={x} value={x}>{x}</SelectItem>)}</SelectContent></Select><Select value={level} onValueChange={setLevel}><SelectTrigger className="w-40"><SelectValue placeholder={isMaintenance?"Priorité":"Gravité"}/></SelectTrigger><SelectContent><SelectItem value="all">Tous les niveaux</SelectItem>{(isMaintenance?["Faible","Moyenne","Haute","Urgente"]:["Faible","Moyenne","Élevée"]).map(x=><SelectItem key={x} value={x}>{x}</SelectItem>)}</SelectContent></Select><Button variant="outline" onClick={()=>toast.success("Export généré avec succès")}><FileDown/>Exporter</Button><CreateDialog kind={kind}/></div>

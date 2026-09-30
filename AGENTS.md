@@ -14,3 +14,4 @@
 
 ## Technical decisions
 - Keep cross-module demo state in a client-side React context backed by centralized mock seed data, because this MVP explicitly excludes backend persistence.
+- Circuit generation, driver assignment, crisis redistribution and compliance alerts are computed by pure functions in src/lib/transport-engine.ts, with the live plan held in DemoProvider, so every page derives from one consistent simulated organization.

@@ -1,9 +1,6 @@
-# Phase de finition fonctionnelle
-
-- [x] Ajouter les données et l’état partagé pour maintenance, incidents, notifications et activité
-- [x] Finaliser Maintenance et Incidents avec formulaires, détails et actions locales
-- [x] Relier les KPI, alertes, recherche globale et notifications
-- [x] Construire Analytics et son assistant IA simulé
-- [x] Finaliser Paramètres et historique d’activité
-- [x] Enrichir tables, filtres, actions groupées et retours utilisateur
-- [x] Harmoniser les pages existantes et valider le scénario de démonstration
+# Roadmap
+- [x] Logique IA automatique (génération circuits → affectation chauffeurs)
+- [x] Nouvel élève : recommandation IA de circuit
+- [x] Agent Gestion de Crise (panne → redistribution)
+- [x] Fiches véhicule / chauffeur enrichies + import de documents simulé
+- [x] Agent Alertes & Conformité, dashboard, planning, analytics, paramètres adaptés
